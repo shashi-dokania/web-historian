@@ -34,22 +34,26 @@ exports.readListOfUrls = function(cb) {
   });
 };
 
-exports.isUrlInList = function(url) {
-  var urlList = exports.readListOfUrls();
-  if (urlList.indexOf(url)) {
-    return true;
-  } else {
-    return false;
-  }
+exports.isUrlInList = function(url, cb) {
+  exports.readListOfUrls(function(data) {
+    var found = false;
+    data.forEach(function(target) {
+      if (target === url) {
+        found = true;
+      }
+    });
+
+    cb(found);
+  });
 };
 
 exports.addUrlToList = function(url, cb) {
-  fs.appendFile(exports.paths.list, url, function(err, data) {
+  fs.appendFile(exports.paths.list, url+'\n', function(err, data) {
     if (err) {
       console.error(err);
     }
-    cb();
   });
+  cb();
 };
 
 exports.isUrlArchived = function() {

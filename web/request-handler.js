@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
+var queryString = require('querystring');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
@@ -28,15 +29,14 @@ exports.handleRequest = function (req, res) {
       if (err) {
         console.error(err);
       }
-      content += data;
+      content += data.toString();
     });
     
     req.on('end', function() {
-      content = JSON.parse(content);
-      fs.appendFile(archive.paths.list, content, function(err) {
-        if (err) {
-          console.error(err);
-        }
+      var reqUrl = queryString.parse(content).url;
+      archive.addUrlToList(reqUrl, function() {
+        res.writeHead(302, {"Content-Type": "text/plain"});
+        res.end();
       });
     });
 

@@ -37,6 +37,7 @@ exports.handleRequest = function (req, res) {
 
       archive.isUrlArchived(reqUrl, function(result) {
         if (result) {
+          htmlFetcher.fetchHtml(reqUrl, path.join(archive.paths.archivedSites, reqUrl));
           readFile(archive.paths.archivedSites, reqUrl);
         } else {
           archive.addUrlToList(reqUrl, function() {

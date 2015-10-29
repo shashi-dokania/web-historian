@@ -15,7 +15,7 @@ exports.handleRequest = function (req, res) {
         res.end('Cannot read file');
       }
       res.writeHead(200, httpHelpers.headers);
-      res.end(JSON.stringify(data));
+      res.end(data);
     });
   };
 

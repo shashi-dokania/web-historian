@@ -72,6 +72,6 @@ exports.isUrlArchived = function(url, cb) {
 
 exports.downloadUrls = function(urlArray) {
   urlArray.forEach(function(url) {
-    fs.writeFile(path.join(exports.paths.archivedSites, url), url);
+    fs.appendFile(path.join(exports.paths.archivedSites, url), url);
   });
 };

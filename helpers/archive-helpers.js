@@ -63,7 +63,7 @@ exports.isUrlArchived = function(url, cb) {
 
   fs.readdir(exports.paths.archivedSites, function(err, files) {
     files.forEach(function(file) {
-      if (file === path.join(exports.paths.archivedSites, url)) {
+      if (file === url) {
         archived = true;
       }
     });

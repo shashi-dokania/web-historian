@@ -4,11 +4,13 @@ var httpRequest = require('http-request');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 
-var sites = archive.readListOfUrls(function() {
-  // return;
+var mostRecentSite
+var mostRecentSiteSearch = archive.readListOfUrls(function(result) {
+  mostRecentSite = [result[result.length-2]];
+  return mostRecentSite;
 });
 
 // downloads Urls to archive folder from the list
 exports.loadSites = function() {
-  archive.downloadUrls(sites);
+  archive.downloadUrls(mostRecentSite);
 }

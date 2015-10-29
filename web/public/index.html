@@ -6,15 +6,7 @@
 <body>
   Enter a URL here:
   <form method="POST">
-    <input type="input" name="url" class="url"></input>
+    <input type="input" name="url"></input>
   </form>
-  <script>
-    $('.url').keypress(function(e) {
-      if (e.which === 13) {
-        $('form').submit();
-        return false;
-      }
-    });
-  </script>
 </body>
 </html>

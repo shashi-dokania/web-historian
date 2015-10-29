@@ -26,7 +26,9 @@ exports.handleRequest = function (req, res) {
     readFile(archive.paths.archivedSites, req.url);
   } else if (req.method === 'POST') {
     // separate conditional between whether archive.isUrlArchived
-    if (archive.isUrlArchived(req.url)) {
+    if (archive.isUrlArchived(req.url, function(result) {
+      return result;
+    })) {
       // if true, render page
       // maybe this connects to get request (line 26)
       readFile(archive.paths.archivedSites, req.url);

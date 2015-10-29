@@ -6,7 +6,7 @@ var queryString = require('querystring');
 
 exports.handleRequest = function (req, res) {
 
-  console.log('Request method: ', req.method, 'Request url: ', req.url);
+  // console.log('Request method: ', req.method, 'Request url: ', req.url);
   var readFile = function(urlPath, endPoint) {
     fs.readFile(path.join(urlPath, endPoint), 'utf8', function(err, data) {
       if (err) {
@@ -23,13 +23,9 @@ exports.handleRequest = function (req, res) {
   } else if (req.method === 'GET') {
     readFile(archive.paths.archivedSites, req.url);
   } else if (req.method === 'POST') {
-
     var content = '';
-    req.on('data', function(err, data) {
-      if (err) {
-        console.error(err);
-      }
-      content += data.toString();
+    req.on('data', function(data) {
+      content += data;
     });
     
     req.on('end', function() {
@@ -40,5 +36,7 @@ exports.handleRequest = function (req, res) {
       });
     });
 
+  } else {
+    res.end(archive.paths.list);
   }
 };

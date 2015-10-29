@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 var queryString = require('querystring');
+var httpHelpers = require('./http-helpers');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
@@ -10,10 +11,10 @@ exports.handleRequest = function (req, res) {
   var readFile = function(urlPath, endPoint) {
     fs.readFile(path.join(urlPath, endPoint), 'utf8', function(err, data) {
       if (err) {
-        res.writeHead(404);
+        res.writeHead(404, httpHelpers.headers);
         res.end('Cannot read file');
       }
-      res.writeHead(200, {"Content-Type": "text/plain"});
+      res.writeHead(200, httpHelpers.headers);
       res.end(JSON.stringify(data));
     });
   };
@@ -31,7 +32,7 @@ exports.handleRequest = function (req, res) {
     req.on('end', function() {
       var reqUrl = queryString.parse(content).url;
       archive.addUrlToList(reqUrl, function() {
-        res.writeHead(302, {"Content-Type": "text/plain"});
+        res.writeHead(302, httpHelpers.headers);
         res.end();
       });
     });

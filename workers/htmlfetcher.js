@@ -4,4 +4,11 @@ var httpRequest = require('http-request');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 
-var sites = arhive.readListOfUrls();
+var sites = archive.readListOfUrls(function() {
+  // return;
+});
+
+// downloads Urls to archive folder from the list
+exports.loadSites = function() {
+  archive.downloadUrls(sites);
+}

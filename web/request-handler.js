@@ -22,38 +22,32 @@ exports.handleRequest = function (req, res) {
 
   if (req.method === 'GET' && req.url === '/') {
     readFile(archive.paths.siteAssets, 'index.html');
+
   } else if (req.method === 'GET') {
     readFile(archive.paths.archivedSites, req.url);
+
   } else if (req.method === 'POST') {
-    // separate conditional between whether archive.isUrlArchived
     var content = '';
     req.on('data', function(data) {
       content += data;
     });
+
     req.on('end', function() {
       var reqUrl = queryString.parse(content).url;
-      console.log(reqUrl);
+
       archive.isUrlArchived(reqUrl, function(result) {
-        console.log(result);
-        return result;
-      });
-      archive.addUrlToList(reqUrl, function() {
-        // htmlFetcher.loadSites();
-        readFile(archive.paths.siteAssets, 'load.html');
-        res.writeHead(302, httpHelpers.headers);
-        res.end();
+        if (result) {
+          readFile(archive.paths.archivedSites, reqUrl);
+        } else {
+          archive.addUrlToList(reqUrl, function() {
+            readFile(archive.paths.siteAssets, 'loading.html');
+            archive.downloadUrls([reqUrl]);
+            res.writeHead(302, httpHelpers.headers);
+            res.end();
+          });
+        }
       });
     });
-
-    // if (archive.isUrlArchived(reqUrl, function(result) {
-    //   return result;
-    // })) {
-    //   // if true, render page
-    //   // maybe this connects to get request (line 26)
-    //   readFile(archive.paths.archivedSites, reqUrl);
-    // } else {
-    //   // else, render loading.html & add to list and archives
-    // }
 
   } else {
     res.end(archive.paths.list);

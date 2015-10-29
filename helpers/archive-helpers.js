@@ -77,12 +77,11 @@ exports.downloadUrls = function(urlArray) {
     request({
       uri: 'http://' + url
     }, function(err, res, body) {
-      fs.writeFile(url, body, function(err) {
+      fs.writeFile(urlPath, body, function(err) {
         if (err) {
           console.error(err);
         }
       });
     });
-    fs.appendFile(urlPath, url);
   });
 };
